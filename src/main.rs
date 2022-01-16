@@ -17,7 +17,7 @@ fn main() {
         i += 1;
 
         println!();
-        print!("input[{}]: ", i);
+        print!("input[{i}]: ");
         let _ = std::io::stdout().flush();
 
         let mut line = String::new();
@@ -34,7 +34,7 @@ fn main() {
             }
             "roll" => {
                 if let Some(t) = save.get(what[1]) {
-                    println!("{}", t);
+                    println!("{t}");
                 }
             }
             _ => println!("{}", line.parse::<Template>().unwrap()),
@@ -87,8 +87,8 @@ impl FromStr for Item {
 impl Display for Item {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Value(v) => write!(f, "{}", v),
-            Self::Dice(n, i) => write!(f, "{}d{}", n, i),
+            Self::Value(v) => write!(f, "{v}"),
+            Self::Dice(n, i) => write!(f, "{n}d{i}"),
         }
     }
 }
@@ -131,7 +131,7 @@ impl Display for Template {
                 "  {}",
                 self.0
                     .iter()
-                    .map(|i| format!("{}", i))
+                    .map(|i| format!("{i}"))
                     .collect::<Vec<_>>()
                     .join(" + ")
             )?;
