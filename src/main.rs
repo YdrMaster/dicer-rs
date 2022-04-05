@@ -1,5 +1,5 @@
-use std::{collections::HashMap, fmt::Display, io::Write, str::FromStr};
 use rand::Rng;
+use std::{collections::HashMap, fmt::Display, io::Write, str::FromStr};
 
 #[derive(Debug)]
 enum Item {
@@ -11,33 +11,26 @@ struct Template(Vec<Item>);
 
 fn main() {
     let mut save = HashMap::<String, Template>::new();
-    let mut i = 0;
-    loop {
-        i += 1;
-
-        println!();
+    for i in 0usize.. {
         print!("input[{i}]: ");
         let _ = std::io::stdout().flush();
 
         let mut line = String::new();
-        if std::io::stdin().read_line(&mut line).is_err() {
-            continue;
-        }
-        let what = line.split_whitespace().collect::<Vec<_>>();
-        if what.is_empty() {
-            continue;
-        }
-        match what[0] {
-            "save" => {
-                save.insert(what[1].to_string(), what[2].parse::<Template>().unwrap());
-            }
-            "roll" => {
-                if let Some(t) = save.get(what[1]) {
-                    println!("{t}");
+        if std::io::stdin().read_line(&mut line).is_ok() {
+            match line.split_whitespace().collect::<Vec<_>>().as_slice() {
+                ["save", name, template] => {
+                    save.insert(name.to_string(), template.parse::<Template>().unwrap());
                 }
+                ["roll", template] => {
+                    if let Some(t) = save.get(*template) {
+                        println!("{t}");
+                    }
+                }
+                [line] => println!("{}", line.parse::<Template>().unwrap()),
+                _ => {}
             }
-            _ => println!("{}", line.parse::<Template>().unwrap()),
-        };
+        }
+        println!();
     }
 }
 
@@ -45,7 +38,7 @@ impl Item {
     /// 计算
     fn cauculate(&self) -> i16 {
         match self {
-            Self::Value(v) => *v as i16,
+            Self::Value(v) => *v as _,
             Self::Dice(n, i) => (0..*n)
                 .map(|_| rand::thread_rng().gen_range(1..*i) as i16)
                 .sum(),
