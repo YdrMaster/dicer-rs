@@ -1,5 +1,4 @@
 use std::{collections::HashMap, fmt::Display, io::Write, str::FromStr};
-
 use rand::Rng;
 
 #[derive(Debug)]
